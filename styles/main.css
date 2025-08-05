@@ -144,7 +144,9 @@ body {
 .features h2 {
     font-size: 2rem;
     color: #e67e22;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem; /* More space below title */
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
 .features-list {
@@ -152,15 +154,23 @@ body {
     justify-content: center;
     gap: 2rem;
     flex-wrap: wrap;
+    margin-bottom: 2rem; /* Space below cards */
 }
 
 .feature-card {
     background: #fff7e6;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     padding: 2rem 1.5rem;
     width: 220px;
     text-align: center;
+    transition: box-shadow 0.2s, transform 0.2s;
+    margin-bottom: 1rem;
+}
+
+.feature-card:hover {
+    box-shadow: 0 4px 24px rgba(230,126,34,0.15);
+    transform: translateY(-6px) scale(1.03);
 }
 
 .feature-icon {
@@ -174,11 +184,13 @@ body {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
     color: #333;
+    font-weight: 600;
 }
 
 .feature-card p {
     color: #555;
     font-size: 1rem;
+    margin-bottom: 0;
 }
 
 /* ====== About Section ====== */
@@ -586,9 +598,13 @@ footer {
     .features-list {
         flex-direction: column;
         gap: 1rem;
+        align-items: center;
     }
     .feature-card {
-        padding: 1rem;
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto 1rem auto;
+        padding: 1.2rem;
     }
     .menu-items {
         grid-template-columns: 1fr;
@@ -676,10 +692,13 @@ footer {
     .features-list {
         flex-direction: column;
         gap: 1rem;
+        align-items: center;
     }
     .feature-card {
-        padding: 1rem;
         width: 100%;
+        max-width: 320px;
+        margin: 0 auto 1rem auto;
+        padding: 1.2rem;
     }
     .menu-items {
         grid-template-columns: 1fr;
@@ -712,4 +731,3 @@ footer {
         padding: 1rem;
     }
 }
-
