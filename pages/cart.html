@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo-area">
+            <img src="logo9.png" alt="Food & Beverage Shop Logo" class="logo-img">
+            <span class="logo-text">Food & Beverage Shop</span>
+            <a href="cart.html" class="cart-icon">🛒 <span id="cart-count">0</span></a>
+
+        </div>
+        <nav class="main-nav">
+            <a href="../index.html">Home</a>
+            <a href="menu.html">Menu</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+    <div class="cart-container">
+        <h1>Your Shopping Cart</h1>
+        <div id="cart-items"></div>
+        <div class="total" id="cart-total"></div>
+    </div>
+    <script>
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+
+        function renderCart() {
+            cartItemsContainer.innerHTML = '';
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
+                cartTotal.textContent = '';
+                return;
+            }
+            let totalPrice = 0;
+            cart.forEach((item, idx) => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                itemElement.innerHTML = `
+                    <span>${item.name}</span>
+                    <div class="cart-controls">
+                        <button class="cart-minus" data-idx="${idx}">-</button>
+                        <span class="cart-qty">${item.quantity}</span>
+                        <button class="cart-plus" data-idx="${idx}">+</button>
+                        <button class="cart-delete" data-idx="${idx}">&#10006;</button>
+                    </div>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                cartItemsContainer.appendChild(itemElement);
+                totalPrice += item.price * item.quantity;
+            });
+            cartTotal.textContent = 'Total: $' + totalPrice.toFixed(2);
+
+            // Add event listeners for controls
+            document.querySelectorAll('.cart-plus').forEach(btn => {
+                btn.onclick = function() {
+                    cart[this.dataset.idx].quantity += 1;
+                    saveAndRender();
+                };
+            });
+            document.querySelectorAll('.cart-minus').forEach(btn => {
+                btn.onclick = function() {
+                    if (cart[this.dataset.idx].quantity > 1) {
+                        cart[this.dataset.idx].quantity -= 1;
+                        saveAndRender();
+                    }
+                };
+            });
+            document.querySelectorAll('.cart-delete').forEach(btn => {
+                btn.onclick = function() {
+                    cart.splice(this.dataset.idx, 1);
+                    saveAndRender();
+                };
+            });
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        renderCart();
+    </script>
+</body>
+</html>

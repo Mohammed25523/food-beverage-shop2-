@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Food and Beverage Shop</title>
+    <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo-area">
+            <img src="logo9.png" alt="Food & Beverage Shop Logo" class="logo-img">
+            <span class="logo-text">Food & Beverage Shop</span>
+            <a href="cart.html" class="cart-icon">🛒 <span id="cart-count">0</span></a>
+        </div>
+        <nav class="main-nav">
+            <a href="../index.html">Home</a>
+            <a href="menu.html">Menu</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <section class="about-section">
+        <div class="about-card">
+            <h1>About Us</h1>
+            <p>Welcome to our Food and Beverage Shop! We are dedicated to providing you with the finest selection of food and beverages, sourced from the best suppliers.</p>
+            <p>Our mission is to deliver delicious and high-quality products right to your doorstep, ensuring that you have the best culinary experience possible.</p>
+            <p>Thank you for choosing us as your go-to shop for all your food and beverage needs!</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Food and Beverage Shop. All rights reserved.</p>
+    </footer>
+
+        <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+    }
+});
+</script>
+
+</body>
+</html>

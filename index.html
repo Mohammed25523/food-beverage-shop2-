@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food and Beverage Shop</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo-area">
+            <img src="pages/logo9.png" alt="Food & Beverage Shop Logo" class="logo-img">
+            <span class="logo-text">Food & Beverage Shop</span>
+            <a href="pages/cart.html" class="cart-icon">🛒 <span id="cart-count">0</span></a>
+        </div>
+        <nav class="main-nav">
+            <a href="pages/menu.html">Menu</a>
+            <a href="pages/about.html">About</a>
+            <a href="pages/contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="home-hero">
+            <div class="home-content">
+                <h1>Welcome to Our Food and Beverage Shop</h1>
+                <p>Explore our delicious offerings delivered right to your door.</p>
+                <a href="pages/menu.html" class="btn">Order Now</a>
+            </div>
+        </section>
+
+        <section class="features">
+            <h2>Why Choose Us?</h2>
+            <div class="features-list">
+                <div class="feature-card">
+                    <span class="feature-icon">&#127828;</span>
+                    <h3>Fresh Ingredients</h3>
+                    <p>We use only the freshest ingredients for all our products.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">&#128176;</span>
+                    <h3>Affordable Prices</h3>
+                    <p>Enjoy quality food and beverages at great prices.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">&#128666;</span>
+                    <h3>Fast Delivery</h3>
+                    <p>Get your order delivered quickly and safely to your door.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-preview">
+            <h2>About Us</h2>
+            <p>Food & Beverage Shop is dedicated to providing delicious, high-quality products and excellent customer service. Learn more about our story and values.</p>
+            <a href="pages/about.html" class="btn-secondary">Read More</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Food and Beverage Shop. All rights reserved.</p>
+    </footer>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Food & Beverage Shop</title>
+    <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo-area">
+            <img src="logo9.png" alt="Food & Beverage Shop Logo" class="logo-img">
+            <span class="logo-text">Food & Beverage Shop</span>
+            <a href="cart.html" class="cart-icon">🛒 <span id="cart-count">0</span></a>
+
+        </div>
+        <nav class="main-nav">
+            <a href="../index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+            
+    <main>
+        <h1>Our Menu</h1>
+        <div class="menu-filter">
+            <input type="text" id="menuSearch" placeholder="Search products..." />
+            <select id="categoryFilter">
+                <option value="">All Categories</option>
+                <option value="chips">Chips</option>
+                <option value="drinks">Drinks</option>
+            </select>
+        </div>
+        <section class="menu-items">    
+            <article class="product-card" data-id="1" data-name="Tiger Excellence Thai Sweet Chili" data-price="1.00" data-category="chips">
+                <img src="image1.jpg" alt="Tiger Excellence Thai Sweet Chili Potato Chips" class="product-image">
+                <div class="product-info">
+                    <h2>Tiger Excellence Thai Sweet Chili Potato Chips - 85-75g</h2>
+                    <p class="product-desc">A delicious blend of flavors, perfect for any time of day.</p>
+                    <span class="product-price">$1.00</span>
+                    <button class="add-to-cart cart-btn">
+                        <span class="cart-btn-icon">&#128722;</span>
+                    </button>
+                </div>
+            </article>
+            <article class="product-card" data-id="2" data-name="Tiger Excellence Lime & Coriander" data-price="1.00" data-category="chips">
+                <img src="image2.jpg" alt="Tiger Excellence Lime & Coriander Potato Chips" class="product-image">
+                <div class="product-info">
+                    <h2>Tiger Excellence Lime & Coriander Potato Chips - 85-75g</h2>
+                    <p class="product-desc">Freshly made with premium ingredients.</p>
+                    <span class="product-price">$1.00</span>
+                    <button class="add-to-cart cart-btn">
+                        <span class="cart-btn-icon">&#128722;</span>
+                    </button>
+                </div>
+            </article>
+            <article class="product-card" data-id="3" data-name="Tiger Excellence Balsamic Vinegar" data-price="2.00" data-category="chips">
+                <img src="image3.jpg" alt="Tiger Excellence Balsamic Vinegar & Sea Salt Potato Chips" class="product-image">
+                <div class="product-info">
+                    <h2>Tiger Excellence Balsamic Vinegar & Sea Salt Potato Chips - 92 - 102g</h2>
+                    <p class="product-desc">A classic favorite, served hot and fresh.</p>
+                    <span class="product-price">$2.00</span>
+                    <button class="add-to-cart cart-btn">
+                        <span class="cart-btn-icon">&#128722;</span>
+                    </button>
+                </div>
+            </article>
+            <article class="product-card" data-id="4" data-name="Juhayna Mixed Berries Juice" data-price="0.50" data-category="drinks">
+                <img src="image4.jpg" alt="Juhayna Mixed Berries Juice - 235ml" class="product-image">
+                <div class="product-info">
+                    <h2>Juhayna Mixed Berries Juice - 235ml</h2>
+                    <p class="product-desc">The original taste of Juice.</p>
+                    <span class="product-price">$0.50</span>
+                    <button class="add-to-cart cart-btn">
+                        <span class="cart-btn-icon">&#128722;</span>
+                    </button>
+                </div>
+            </article>
+            <article class="product-card" data-id="5" data-name="Juhayna Pineapple Juice" data-price="0.50" data-category="drinks">
+                <img src="image5.jpg" alt="Juhayna Pineapple Juice - 235ml" class="product-image">
+                <div class="product-info">
+                    <h2>Juhayna Pineapple Juice - 235ml</h2>
+                    <p class="product-desc">Freshly squeezed Pineapple juice.</p>
+                    <span class="product-price">$0.50</span>
+                    <button class="add-to-cart cart-btn">
+                        <span class="cart-btn-icon">&#128722;</span>
+                    </button>
+                </div>
+            </article>
+            <article class="product-card" data-id="6" data-name="Juhayna Mango Juice" data-price="1.50" data-category="drinks">
+                <img src="image6.jpg" alt="Juhayna Mango Juice - 1L" class="product-image">
+                <div class="product-info">
+                    <h2>Juhayna Mango Juice - 1L</h2>   
+                    <p class="product-desc">A refreshing blend of Mango.</p>
+                    <span class="product-price">$1.50</span>
+                    <button class="add-to-cart cart-btn">
+                        <span class="cart-btn-icon">&#128722;</span>
+                    </button>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Food and Beverage Shop. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const searchInput = document.getElementById('menuSearch');
+        const categorySelect = document.getElementById('categoryFilter');
+        const cards = document.querySelectorAll('.product-card');
+
+        function filterMenu() {
+            const search = searchInput.value.toLowerCase();
+            const category = categorySelect.value;
+            cards.forEach(card => {
+                const name = card.querySelector('h2').textContent.toLowerCase();
+                const cardCategory = card.getAttribute('data-category');
+                const matchesSearch = name.includes(search);
+                const matchesCategory = !category || cardCategory === category;
+                card.style.display = (matchesSearch && matchesCategory) ? '' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('input', filterMenu);
+        categorySelect.addEventListener('change', filterMenu);
+    </script>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        updateCartCount();
+
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', () => {
+                const productCard = button.closest('.product-card');
+                const product = {
+                    id: productCard.dataset.id,
+                    name: productCard.dataset.name,
+                    price: parseFloat(productCard.dataset.price),
+                    quantity: 1
+                };
+
+                const existingProduct = cart.find(item => item.id === product.id);
+                if (existingProduct) {
+                    existingProduct.quantity += 1;
+                } else {
+                    cart.push(product);
+                }
+
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+            });
+        });
+
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = totalItems;
+        }
+    </script>
+</body>
+</html>

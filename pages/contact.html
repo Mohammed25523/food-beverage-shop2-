@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Food Store</title>
+    <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo-area">
+            <img src="logo9.png" alt="Food & Beverage Shop Logo" class="logo-img">
+            <span class="logo-text">Food & Beverage Shop</span>
+            <a href="cart.html" class="cart-icon">🛒 <span id="cart-count">0</span></a>
+        </div>
+        <nav class="main-nav">
+            <a href="../index.html">Home</a>
+            <a href="menu.html">Menu</a>
+            <a href="about.html">About</a>
+            
+        </nav>
+    </header>
+
+    <section class="contact">
+        <h1>Contact Us</h1>
+        <div class="contact-info">
+            <div>
+                <span class="icon">&#9993;</span>
+                <a href="mailto:mhmd.alim1399@gmail.com">mhmd.alim1399@gmail.com</a>
+            </div>
+            <div>
+                <span class="icon">&#9742;</span>
+                <a href="tel:+20 01052 1011">+20 01052 1011</a>
+            </div>
+            <div>
+                <span class="icon">&#127968;</span>
+                gala Street, el daqahlya, mansoura
+            </div>
+        </div>
+        <p>If you have any questions, feel free to reach out to us!</p>
+        <form action="#" method="post" class="contact-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" required></textarea>
+
+            <button type="submit" class="btn">Send Message</button>
+            <div class="form-success" style="display:none;">Thank you for contacting us!</div>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 Food Store. All rights reserved.</p>
+    </footer>
+    
+        <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+    }
+});
+</script>
+</body>
+</html>
