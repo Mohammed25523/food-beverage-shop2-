@@ -263,7 +263,30 @@ html, body {
     margin-bottom: 1.2rem;
     line-height: 1.7;
 }
-
+.read-more-btn {
+    display: inline-block;
+    background: #fff;
+    color: #e67e22;
+    font-weight: 600;
+    font-size: 1.05rem;
+    padding: 0.7rem 2rem;
+    border: 2px solid #e67e22;
+    border-radius: 6px;
+    box-shadow: none;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, border 0.2s, transform 0.2s;
+    cursor: pointer;
+    margin-top: 1rem;
+    letter-spacing: 0.5px;
+}
+.read-more-btn:hover, .read-more-btn:focus {
+    background: #e67e22;
+    color: #fff;
+    border-color: #e67e22;
+    text-decoration: none;
+    outline: none;
+    transform: translateY(-2px) scale(1.03);
+}
 /* ====== Menu Section ====== */
 main h1 {
     color: #e67e22;
