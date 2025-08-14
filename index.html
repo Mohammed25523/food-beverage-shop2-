@@ -15,6 +15,7 @@
         </div>
         <nav class="main-nav">
             <div class="nav-links">
+                <a href="index.html">Home</a>
                 <a href="pages/menu.html">Menu</a>
                 <a href="pages/about.html">About</a>
                 <a href="pages/contact.html">Contact</a>
@@ -63,6 +64,86 @@
                     <span class="feature-icon">&#128666;</span>
                     <h3>Fast Delivery</h3>
                     <p>Get your order delivered quickly and safely to your door.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-products">
+            <h2>Featured Products</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <img src="pages/image3.jpg" alt="Tiger Excellence Balsamic Vinegar & Sea Salt Potato Chips" class="product-image">
+                    <div class="product-info">
+                        <h3>Tiger Excellence Balsamic Vinegar & Sea Salt Potato Chips</h3>
+                        <p class="product-desc">A classic favorite, served hot and fresh. Premium quality chips with unique flavor combination.</p>
+                        <span class="product-price">EGP 15.00</span>
+                        <button class="add-to-cart-btn" data-id="3" data-name="Tiger Excellence Balsamic Vinegar" data-price="EGP 15.00">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="pages/image6.jpg" alt="Juhayna Mango Juice - 1L" class="product-image">
+                    <div class="product-info">
+                        <h3>Juhayna Mango Juice - 1L</h3>
+                        <p class="product-desc">A refreshing blend of Mango. Perfect for any time of day with natural fruit goodness.</p>
+                        <span class="product-price">EGP 25.00</span>
+                        <button class="add-to-cart-btn" data-id="6" data-name="Juhayna Mango Juice" data-price="EGP 25.00">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="pages/image1.jpg" alt="Tiger Excellence Thai Sweet Chili Potato Chips" class="product-image">
+                    <div class="product-info">
+                        <h3>Tiger Excellence Thai Sweet Chili Potato Chips</h3>
+                        <p class="product-desc">A delicious blend of flavors, perfect for any time of day. Crispy and flavorful snack.</p>
+                        <span class="product-price">EGP 10.00</span>
+                        <button class="add-to-cart-btn" data-id="1" data-name="Tiger Excellence Thai Sweet Chili" data-price="EGP 10.00">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            <a href="pages/menu.html" class="btn view-all-products-btn">View All Products</a>
+        </section>
+
+        <section class="testimonials">
+            <h2>What Our Customers Say</h2>
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="stars">★★★★★</div>
+                        <p>"Easy-to-use app, ordering was a breeze!, Highly recommend!"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👨</div>
+                        <div class="author-info">
+                            <h4>Ahmed Mahmoud</h4>
+                            <span>Regular Customer</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="stars">★★★★★</div>
+                        <p>"Every order I place is a great experience, no issues at all"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👩</div>
+                        <div class="author-info">
+                            <h4>Menna Mahmoud</h4>
+                            <span>Food Enthusiast</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="stars">★★★★★</div>
+                        <p>"The app is so user-friendly, everything is clear and simple.            Great prices for the quality and portion sizes - highly recommend!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👨</div>
+                        <div class="author-info">
+                            <h4>Mohamed Mahmoud</h4>
+                            <span>Happy Customer</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -121,3 +202,49 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
+    <script>
+        // Featured Products Cart Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            updateCartCount();
+
+            // Add event listeners to featured product buttons
+            document.querySelectorAll('.featured-products .add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const product = {
+                        id: button.dataset.id,
+                        name: button.dataset.name,
+                        price: parseFloat(button.dataset.price),
+                        quantity: 1
+                    };
+
+                    const existingProduct = cart.find(item => item.id === product.id);
+                    if (existingProduct) {
+                        existingProduct.quantity += 1;
+                    } else {
+                        cart.push(product);
+                    }
+
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    updateCartCount();
+                    
+                    // Visual feedback
+                    button.textContent = 'Added!';
+                    button.style.background = '#27ae60';
+                    setTimeout(() => {
+                        button.textContent = 'Add to Cart';
+                        button.style.background = '#e67e22';
+                    }, 1500);
+                });
+            });
+
+            function updateCartCount() {
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const cartCountElement = document.getElementById('cart-count');
+                if (cartCountElement) {
+                    cartCountElement.textContent = totalItems;
+                }
+            }
+        });
+    </script>
+
