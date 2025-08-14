@@ -12,7 +12,6 @@
             <img src="logo9.png" alt="Food & Beverage Shop Logo" class="logo-img">
             <span class="logo-text">Food & Beverage Shop</span>
             <a href="cart.html" class="cart-icon">🛒 <span id="cart-count">0</span></a>
-
         </div>
         <nav class="main-nav">
             <div class="nav-links">
@@ -30,22 +29,84 @@
     
     <div class="cart-container">
         <h1>Your Shopping Cart</h1>
-        <div id="cart-items"></div>
-        <div class="total" id="cart-total"></div>
-        <button class="btn place-order-btn" id="place-order-btn">Place Order</button>
+        
+        <!-- Cart Items Section -->
+        <div id="cart-section">
+            <div id="cart-items"></div>
+            <div class="total" id="cart-total"></div>
+            <button class="btn place-order-btn" id="place-order-btn">Place Order</button>
+        </div>
+        
+        <!-- Order Information Form (Hidden by default) -->
+        <div id="order-form-section" style="display: none;">
+            <h2>Delivery Information</h2>
+            <form id="order-form" class="order-form">
+                <div class="form-group">
+                    <label for="customer-street">Street Address:</label>
+                    <input type="text" id="customer-street" name="street" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-phone">Phone Number:</label>
+                    <input type="tel" id="customer-phone" name="phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-city">City:</label>
+                    <input type="text" id="customer-city" name="city" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-governorate">Governorate:</label>
+                    <input type="text" id="customer-governorate" name="governorate" required>
+                </div>
+                
+                <div class="form-buttons">
+                    <button type="submit" class="btn confirm-order-btn">Confirm Order</button>
+                    <button type="button" class="btn cancel-order-btn" id="cancel-order-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Thank You Message (Hidden by default) -->
+        <div id="thank-you-section" style="display: none;">
+            <div class="thank-you-message">
+                <h2>🎉 Thank You for Your Order!</h2>
+                <p>Your order has been successfully placed and will be delivered to:</p>
+                <div class="delivery-details">
+                    <p><strong>Street:</strong> <span id="delivery-street"></span></p>
+                    <p><strong>Phone:</strong> <span id="delivery-phone"></span></p>
+                    <p><strong>City:</strong> <span id="delivery-city"></span></p>
+                    <p><strong>Governorate:</strong> <span id="delivery-governorate"></span></p>
+                </div>
+                <p>We will contact you shortly to confirm the delivery time.</p>
+                <button class="btn new-order-btn" id="new-order-btn">Place New Order</button>
+            </div>
+        </div>
     </div>
+    
     <script>
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         const cartItemsContainer = document.getElementById('cart-items');
         const cartTotal = document.getElementById('cart-total');
+        const cartSection = document.getElementById('cart-section');
+        const orderFormSection = document.getElementById('order-form-section');
+        const thankYouSection = document.getElementById('thank-you-section');
+        const placeOrderBtn = document.getElementById('place-order-btn');
+        const orderForm = document.getElementById('order-form');
+        const cancelOrderBtn = document.getElementById('cancel-order-btn');
+        const newOrderBtn = document.getElementById('new-order-btn');
 
         function renderCart() {
             cartItemsContainer.innerHTML = '';
             if (cart.length === 0) {
                 cartItemsContainer.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
                 cartTotal.textContent = '';
+                placeOrderBtn.style.display = 'none';
                 return;
             }
+            
+            placeOrderBtn.style.display = 'block';
             let totalPrice = 0;
             cart.forEach((item, idx) => {
                 const itemElement = document.createElement('div');
@@ -58,12 +119,12 @@
                         <button class="cart-plus" data-idx="${idx}">+</button>
                         <button class="cart-delete" data-idx="${idx}">&#10006;</button>
                     </div>
-                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                    <span>EGP ${(item.price * item.quantity).toFixed(2)}</span>
                 `;
                 cartItemsContainer.appendChild(itemElement);
                 totalPrice += item.price * item.quantity;
             });
-            cartTotal.textContent = 'Total: $' + totalPrice.toFixed(2);
+            cartTotal.textContent = 'Total: EGP ' + totalPrice.toFixed(2);
 
             // Add event listeners for controls
             document.querySelectorAll('.cart-plus').forEach(btn => {
@@ -93,41 +154,107 @@
             renderCart();
         }
 
+        function showOrderForm() {
+            cartSection.style.display = 'none';
+            orderFormSection.style.display = 'block';
+            thankYouSection.style.display = 'none';
+        }
+
+        function showCart() {
+            cartSection.style.display = 'block';
+            orderFormSection.style.display = 'none';
+            thankYouSection.style.display = 'none';
+        }
+
+        function showThankYou(orderData) {
+            cartSection.style.display = 'none';
+            orderFormSection.style.display = 'none';
+            thankYouSection.style.display = 'block';
+            
+            // Display delivery details
+            document.getElementById('delivery-street').textContent = orderData.street;
+            document.getElementById('delivery-phone').textContent = orderData.phone;
+            document.getElementById('delivery-city').textContent = orderData.city;
+            document.getElementById('delivery-governorate').textContent = orderData.governorate;
+        }
+
+        // Event Listeners
+        placeOrderBtn.addEventListener('click', function() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            showOrderForm();
+        });
+
+        cancelOrderBtn.addEventListener('click', function() {
+            showCart();
+        });
+
+        orderForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(orderForm);
+            const orderData = {
+                street: formData.get('street'),
+                phone: formData.get('phone'),
+                city: formData.get('city'),
+                governorate: formData.get('governorate')
+            };
+            
+            // Clear the cart after successful order
+            cart.length = 0;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Show thank you message
+            showThankYou(orderData);
+        });
+
+        newOrderBtn.addEventListener('click', function() {
+            // Reset form
+            orderForm.reset();
+            showCart();
+            renderCart();
+        });
+
+        // Initial render
         renderCart();
     </script>
+    
     <footer class="site-footer">
-    <div class="footer-main">
-        <div class="footer-info">
-            <h3>Food & Beverage Shop</h3>
-            <p>Delicious, high-quality products and excellent customer service.</p>
-            <p><strong>Phone:</strong> <a href="tel:">+20 10 1052 1011</a></p>
-        </div>
-        <div class="footer-social">
-            <h4>Follow Us</h4>
-            <div class="social-icons">
-                <a href="https://facebook.com/" target="_blank" aria-label="Facebook">
-                    <svg width="24" height="24" fill="currentColor"><path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.877v-6.987h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.632.771-1.632 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.128 22 16.991 22 12"></path></svg>
-                </a>
-                <a href="https://instagram.com/" target="_blank" aria-label="Instagram">
-                    <svg width="24" height="24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.974.974 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.974.974-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.974-.974-1.246-2.242-1.308-3.608C2.175 15.647 2.163 15.267 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608C4.515 2.567 5.783 2.295 7.15 2.233 8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.012 7.052.07 5.77.128 4.665.37 3.678 1.357 2.69 2.345 2.448 3.45 2.39 4.732 2.332 6.012 2.32 6.421 2.32 12s.012 5.988.07 7.268c.058 1.282.3 2.387 1.288 3.375.987.987 2.092 1.23 3.374 1.288C8.332 23.988 8.741 24 12 24s3.668-.012 4.948-.07c1.282-.058 2.387-.3 3.374-1.288.988-.988 1.23-2.093 1.288-3.375.058-1.28.07-1.689.07-7.268s-.012-5.988-.07-7.268c-.058-1.282-.3-2.387-1.288-3.375C19.335.37 18.23.128 16.948.07 15.668.012 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"></path></svg>
-                </a>
-                <a href="https://twitter.com/" target="_blank" aria-label="Twitter">
-                    <svg width="24" height="24" fill="currentColor"><path d="M24 4.557a9.93 9.93 0 0 1-2.828.775 4.932 4.932 0 0 0 2.165-2.724c-.951.564-2.005.974-3.127 1.195a4.92 4.92 0 0 0-8.384 4.482C7.691 8.095 4.066 6.13 1.64 3.161c-.542.929-.856 2.01-.857 3.17 0 2.188 1.115 4.116 2.823 5.247a4.904 4.904 0 0 1-2.229-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.936 4.936 0 0 1-2.224.084c.627 1.956 2.444 3.377 4.6 3.417A9.867 9.867 0 0 1 0 21.543a13.94 13.94 0 0 0 7.548 2.212c9.058 0 14.009-7.513 14.009-14.009 0-.213-.005-.425-.014-.636A10.012 10.012 0 0 0 24 4.557z"></path></svg>
-                </a>
+        <div class="footer-main">
+            <div class="footer-info">
+                <h3>Food & Beverage Shop</h3>
+                <p>Delicious, high-quality products and excellent customer service.</p>
+                <p><strong>Phone:</strong> <a href="tel:">+20 10 1052 1011</a></p>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="https://facebook.com/" target="_blank" aria-label="Facebook">
+                        <svg width="24" height="24" fill="currentColor"><path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.877v-6.987h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.632.771-1.632 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.128 22 16.991 22 12"></path></svg>
+                    </a>
+                    <a href="https://instagram.com/" target="_blank" aria-label="Instagram">
+                        <svg width="24" height="24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.974.974 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.974.974-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.974-.974-1.246-2.242-1.308-3.608C2.175 15.647 2.163 15.267 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608C4.515 2.567 5.783 2.295 7.15 2.233 8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.012 7.052.07 5.77.128 4.665.37 3.678 1.357 2.69 2.345 2.448 3.45 2.39 4.732 2.332 6.012 2.32 6.421 2.32 12s.012 5.988.07 7.268c.058 1.282.3 2.387 1.288 3.375.987.987 2.092 1.23 3.374 1.288C8.332 23.988 8.741 24 12 24s3.668-.012 4.948-.07c1.282-.058 2.387-.3 3.374-1.288.988-.988 1.23-2.093 1.288-3.375.058-1.28.07-1.689.07-7.268s-.012-5.988-.07-7.268c-.058-1.282-.3-2.387-1.288-3.375C19.335.37 18.23.128 16.948.07 15.668.012 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"></path></svg>
+                    </a>
+                    <a href="https://twitter.com/" target="_blank" aria-label="Twitter">
+                        <svg width="24" height="24" fill="currentColor"><path d="M24 4.557a9.93 9.93 0 0 1-2.828.775 4.932 4.932 0 0 0 2.165-2.724c-.951.564-2.005.974-3.127 1.195a4.92 4.92 0 0 0-8.384 4.482C7.691 8.095 4.066 6.13 1.64 3.161c-.542.929-.856 2.01-.857 3.17 0 2.188 1.115 4.116 2.823 5.247a4.904 4.904 0 0 1-2.229-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.936 4.936 0 0 1-2.224.084c.627 1.956 2.444 3.377 4.6 3.417A9.867 9.867 0 0 1 0 21.543a13.94 13.94 0 0 0 7.548 2.212c9.058 0 14.009-7.513 14.009-14.009 0-.213-.005-.425-.014-.636A10.012 10.012 0 0 0 24 4.557z"></path></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Refund Policy</a></li>
+                </ul>
             </div>
         </div>
-        <div class="footer-links">
-            <h4>Legal</h4>
-            <ul>
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Terms of Service</a></li>
-                <li><a href="#">Refund Policy</a></li>
-            </ul>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Food and Beverage Shop. All rights reserved.</p>
         </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; 2025 Food and Beverage Shop. All rights reserved.</p>
-    </div>
-</footer>
+    </footer>
 </body>
 </html>
+
